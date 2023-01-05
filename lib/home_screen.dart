@@ -1,6 +1,4 @@
 import 'dart:developer';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -77,7 +75,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                log("${todoList.length}");
+              },
               icon: const Icon(Icons.menu_rounded),
             ),
             Expanded(
@@ -170,6 +170,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     );
                                   } else {
                                     //Delete Todo
+                                    //todoNotifier.arciveTodo(todo.id);
                                     todoNotifier.removeTodo(todo.id);
                                   }
                                 }),
@@ -284,7 +285,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     } else {
                       todo = todo.copyWith(id: id);
                       todoNotifier.editTodo(todo);
-                     
                     }
 
                     todoTitleController.clear();

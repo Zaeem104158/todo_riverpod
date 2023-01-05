@@ -16,8 +16,19 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
       todo,
     ];
   }
-
-  void removeTodo(String todoId) {
+  // void arciveTodo(String todoId){
+  //   state = state
+  //       .where(
+  //         (todo) => todo.id == todoId,
+  //       )
+  //       .toList();
+  // }
+  void removeTodo(String? todoId) {
+    // final deleteState = state
+    //     .where(
+    //       (todo) => todo.id == todoId,
+    //     )
+    //     .toList();
     state = state
         .where(
           (todo) => todo.id != todoId,
