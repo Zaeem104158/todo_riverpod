@@ -6,7 +6,7 @@ import 'package:todo_riverpod/controller/todo_controller.dart';
 import 'package:todo_riverpod/model/todo_model.dart';
 import 'package:uuid/uuid.dart';
 
-var addTodoKey = const Uuid().v4();
+// var addTodoKey = const Uuid().v4();
 // final activeFilterKey = UniqueKey();
 // final completedFilterKey = UniqueKey();
 // final allFilterKey = UniqueKey();
@@ -37,10 +37,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final todoList = ref.watch(todosProvider);
     var items = [
+      "Pin",
       'Edit',
       'Delete',
     ];
-    var editedTodoId;
+    bool pinned = false;
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = size.height / 14;
+    final double itemWidth = size.width / 6;
+
     return SafeArea(
         child: Scaffold(
       // appBar: AppBar(
@@ -58,59 +63,82 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             Expanded(
               child: GridView.builder(
                 itemCount: todoList.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: (itemWidth / itemHeight),
                     crossAxisCount: 2),
                 itemBuilder: (
                   BuildContext context,
                   int index,
                 ) {
-                  return InkWell(
-                    onTap: () {
-                      log("ViewID::${todoList[index].id}");
-                    },
+                  return SizedBox(
+                    height: 100,
                     child: Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: Card(
+                        color: pinned == true ? Colors.blue : Colors.black54,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.only(
+                                      top: 12.0, left: 8.0),
                                   child: Chip(
-                                    label: Text(
-                                      todoList[index].title,
-                                      style: TextStyle(
-                                        fontSize: 18,
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      labelPadding: const EdgeInsets.all(0.0),
+                                      side: const BorderSide(
+                                          color: Colors.black87),
+                                      label: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 6.0,
+                                            right: 6,
+                                            top: 2,
+                                            bottom: 2),
+                                        child: Text(
+                                          todoList[index].title,
+                                          style: const TextStyle(
+                                              color: Colors.black),
+                                        ),
                                       ),
-                                    ),
-                                  ),
+                                      backgroundColor: Colors.white),
                                 ),
                                 const Spacer(),
                                 PopupMenuButton(itemBuilder: (context) {
                                   return [
                                     const PopupMenuItem<int>(
                                       value: 0,
-                                      child: Text("Edit"),
+                                      child: Text("Pin"),
                                     ),
                                     const PopupMenuItem<int>(
                                       value: 1,
+                                      child: Text("Edit"),
+                                    ),
+                                    const PopupMenuItem<int>(
+                                      value: 2,
                                       child: Text("Delete"),
                                     ),
                                   ];
                                 }, onSelected: (value) {
                                   if (value == 0) {
-                                    // editedTodoId = todoList[index].id;
+                                    pinned = true;
+                                    log("$pinned");
                                    
-                                    // customStatefullAlertWidget(
-                                    //     editable: true,
-                                    //     editedTodoId: editedTodoId);
+                                  } else if (value == 1) {
+                                    todoTitleController.text =
+                                        todoList[index].title;
+
+                                    todoDescriptionController.text =
+                                        todoList[index].description;
+
+                                    customStatefullAlertWidget(
+                                        editable: true, id: todoList[index].id);
                                   } else {
-                                    // ref
-                                    //     .read(todosProvider.notifier)
-                                    //     .removeTodo(todoList[index].id);
+                                    ref
+                                        .read(todosProvider.notifier)
+                                        .removeTodo(todoList[index].id);
                                   }
                                 }),
                               ],
@@ -118,7 +146,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             const SizedBox(
                               height: 20,
                             ),
-                            Text(todoList[index].description),
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 6.0, right: 6, top: 2, bottom: 2),
+                                  child: Text(
+                                    todoList[index].description,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Container(
+                                  child: Text("See More"),
+                                )
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -141,18 +183,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     ));
   }
 
-  customStatefullAlertWidget(
-      {bool editable = false, String? editedTodoId}) async {
+  customStatefullAlertWidget({bool editable = false, String? id}) async {
     await showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             content: SizedBox(
-              height: MediaQuery.of(context).size.height / 6,
+              height: MediaQuery.of(context).size.height / 4.5,
               child: Column(
                 children: [
                   //Title
                   TextField(
+                    maxLength: 10,
                     decoration: const InputDecoration(
                       labelText: "Title",
                       hintText: "Work / Exam",
@@ -166,6 +208,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                   //Description
                   TextField(
+                    maxLength: 1000,
                     decoration: const InputDecoration(
                       labelText: "Description",
                       hintText: "Meeting at 12PM",
@@ -181,14 +224,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
             actions: <Widget>[
-              MaterialButton(
-                  elevation: 5.0,
+              ElevatedButton(
+                  child: const Text("Cancle"),
+                  onPressed: () {
+                    todoDescriptionController.clear();
+                    todoTitleController.clear();
+                    Navigator.of(context).pop();
+                  }),
+              ElevatedButton(
                   child: const Text("Save"),
                   onPressed: () {
                     if (editable == false) {
                       ref.read(todosProvider.notifier).addTodo(
                             Todo(
-                              id: addTodoKey,
+                              id: Uuid().v4(),
                               title: todoTitleController.text,
                               description: todoDescriptionController.text,
                             ),
@@ -199,17 +248,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                       Navigator.of(context).pop();
                     } else {
-                      // ref.read(todosProvider.notifier).editTodo(Todo(
-                      //         id: editable,
-                      //         title: todoTitleController.text,
-                      //         description: todoDescriptionController.text,
-                      //       ),);
-                      // todoDescriptionController.clear();
-                      // todoTitleController.clear();
+                      Todo todo = Todo(
+                          id: id!,
+                          description: todoDescriptionController.text,
+                          title: todoTitleController.text);
 
-                      // Navigator.of(context).pop();
+                      ref.read(todosProvider.notifier).editTodo(todo);
+
+                      todoDescriptionController.clear();
+                      todoTitleController.clear();
+
+                      Navigator.of(context).pop();
                     }
-                  })
+                  }),
             ],
           );
         });

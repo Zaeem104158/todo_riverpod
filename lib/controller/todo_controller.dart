@@ -12,15 +12,28 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
   }
 
   void removeTodo(String todoId) {
-    state = [
-      for (final todo in state)
-        if (todo.id != todoId) todo,
-    ];
+    state = state.where((todo) => todo.id != todoId).toList();
+
+    // state = [
+    //   for (final todo in state)
+    //     if (todo.id != todoId) todo,
+    // ];
   }
 
-  void editTodo(String todoId) {
-    log("Check:::$todoId");
-    ;
+  void editTodo(Todo todo) {
+    state = state.map((e) {
+      if (e.id == todo.id) {
+        return todo;
+      }
+
+      return e;
+    }).toList();
+
+    // for (var i = 0; i < state.length; i++) {
+    //   if (state[i].id == todo.id) {
+    //     state[i] = todo;
+    //   }
+    // }
   }
 }
 
