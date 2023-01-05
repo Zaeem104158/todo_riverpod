@@ -6,34 +6,46 @@ import 'package:todo_riverpod/model/todo_model.dart';
 class TodosNotifier extends StateNotifier<List<Todo>> {
   TodosNotifier() : super([]);
 
+  void addAllTodo(List<Todo> todos) {
+    state = todos;
+  }
+
   void addTodo(Todo todo) {
-    //log(todo.id);
-    state = [...state, todo];
+    state = [
+      ...state,
+      todo,
+    ];
   }
 
   void removeTodo(String todoId) {
-    state = state.where((todo) => todo.id != todoId).toList();
-
-    // state = [
-    //   for (final todo in state)
-    //     if (todo.id != todoId) todo,
-    // ];
+    state = state
+        .where(
+          (todo) => todo.id != todoId,
+        )
+        .toList();
   }
 
   void editTodo(Todo todo) {
-    state = state.map((e) {
-      if (e.id == todo.id) {
+    state = state.map((objects) {
+      if (objects.id == todo.id) {
         return todo;
       }
 
-      return e;
+      return objects;
+    }).toList();
+  }
+
+  void pinned(String id, bool pin) {
+    final pinState = state.map((todo) {
+      if (todo.id == id) {
+        return todo.copyWith(pin: pin);
+      }
+
+      return todo;
     }).toList();
 
-    // for (var i = 0; i < state.length; i++) {
-    //   if (state[i].id == todo.id) {
-    //     state[i] = todo;
-    //   }
-    // }
+    pinState.sort((a, b) => (a.pin == true) ? 0 : 1);
+    state = pinState;
   }
 }
 
