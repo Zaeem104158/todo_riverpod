@@ -11,7 +11,7 @@ class TrashScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todoTrashList = ref.watch(todoTrashProvider);
-    //final todoTrashListNotifier = ref.watch(todoTrashProvider.notifier);
+    final todoTrashListNotifier = ref.read(todoTrashProvider.notifier);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -29,10 +29,9 @@ class TrashScreen extends ConsumerWidget {
                       return CheckboxListTile(
                         value: todoTrashList[index].selected,
                         onChanged: (value) {
-                          todoTrashList[index] =
-                              todoTrashList[index].copyWith(selected: value);
-                          //todoTrashListNotifier.
-                         
+                          // log("UpdateState:${todo.selected}");
+                          todoTrashListNotifier
+                              .checkSelectedTrash(todoTrashList[index].id);
                         },
                         title: Text(todoTrashList[index].title),
                         subtitle: Text(
@@ -44,14 +43,14 @@ class TrashScreen extends ConsumerWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    final todoTrashNotifier =
-                        ref.read(todoTrashProvider.notifier);
+                    // final todoTrashNotifier =
+                    //     ref.read(todoTrashProvider.notifier);
 
-                    //selected trash ids
-                    List<String> recoverTodoIdsList = ["123","456"];
+                    // //selected trash ids
+                    // List<String> recoverTodoIdsList = ["123", "456"];
 
-                    todoTrashNotifier
-                        .removeFromTrashProvider(recoverTodoIdsList);
+                    // todoTrashNotifier
+                    //     .removeFromTrashProvider(recoverTodoIdsList);
                   },
                   child: const Text("Recover"),
                 )

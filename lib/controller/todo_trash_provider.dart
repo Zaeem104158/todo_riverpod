@@ -8,8 +8,27 @@ class TodoTrashNotifier extends StateNotifier<List<Todo>> {
 
   final Ref ref;
 
-  void addTrashTodo(Todo todo) {
+  void addTrashTodo(
+    Todo todo,
+  ) {
     state = [...state, todo];
+  }
+
+  void checkSelectedTrash(String id) {
+    final checkSelectState = state.map((e) {
+      if (e.id == id && e.selected == false) {
+        log("Yes");
+        return e.copyWith(selected: true);
+      } else {
+        log("No");
+        return e.copyWith(selected: false);
+      }
+    }).toList();
+    state = checkSelectState;
+  }
+
+  void updateTrashTodo(Todo todo) {
+    log("UpdateState:${todo.selected}");
   }
 
   void removeFromTrashProvider(List<String> todoIds) {
