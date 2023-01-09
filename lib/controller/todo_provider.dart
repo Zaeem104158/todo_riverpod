@@ -1,43 +1,44 @@
 import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_riverpod/controller/todo_trash_provider.dart';
 import 'package:todo_riverpod/model/todo_model.dart';
 
 class TodosNotifier extends StateNotifier<List<Todo>> {
-  TodosNotifier() : super([]);
+  TodosNotifier(this.ref) : super([]);
+
+  final Ref ref;
 
   void addAllTodo(List<Todo> todos) {
     state = todos;
   }
 
   void addTodo(Todo todo) {
-    state = [
-      ...state,
-      todo,
-    ];
+    state = [...state, todo];
   }
-  // void arciveTodo(String todoId){
-  //   state = state
-  //       .where(
-  //         (todo) => todo.id == todoId,
-  //       )
-  //       .toList();
-  // }
+
   void removeTodo(String? todoId) {
-    // final deleteState = state
-    //     .where(
-    //       (todo) => todo.id == todoId,
-    //     )
-    //     .toList();
-    state = state
-        .where(
-          (todo) => todo.id != todoId,
-        )
-        .toList();
+    Todo? trashTodo;
+
+    state = state.where((todo) {
+      if (todo.id != todoId) {
+        
+        return true;
+      }
+      trashTodo = todo;
+      return false;
+    }).toList();
+
+    //Store Trash todos
+
+    if (trashTodo != null) {
+      ref.watch(todoTrashProvider.notifier).addTrashTodo(trashTodo!);
+    }
+
   }
 
   void editTodo(Todo todo) {
     state = state.map((objects) {
+      
       if (objects.id == todo.id) {
         return todo;
       }
@@ -63,5 +64,5 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
 // Finally, we are using StateNotifierProvider to allow the UI to interact with
 // our TodosNotifier class.
 final todosProvider = StateNotifierProvider<TodosNotifier, List<Todo>>((ref) {
-  return TodosNotifier();
+  return TodosNotifier(ref);
 });
