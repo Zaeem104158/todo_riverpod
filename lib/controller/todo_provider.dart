@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_riverpod/controller/todo_trash_provider.dart';
 import 'package:todo_riverpod/model/todo_model.dart';
@@ -21,7 +20,6 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
 
     state = state.where((todo) {
       if (todo.id != todoId) {
-        
         return true;
       }
       trashTodo = todo;
@@ -33,12 +31,10 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
     if (trashTodo != null) {
       ref.watch(todoTrashProvider.notifier).addTrashTodo(trashTodo!);
     }
-
   }
 
   void editTodo(Todo todo) {
     state = state.map((objects) {
-      
       if (objects.id == todo.id) {
         return todo;
       }

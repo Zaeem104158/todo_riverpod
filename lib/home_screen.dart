@@ -33,6 +33,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             description: "Description $index",
             title: "Title $index",
             pin: false,
+            selected: false,
           );
         },
       );
@@ -58,7 +59,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       'Delete',
     ];
 
-    final double gridItemHeight = SizeConfig.getScreenHeight(context) / 6;
+    final double gridItemHeight = SizeConfig.getScreenHeight(context) / 6.5;
     final double gridItemWidth = SizeConfig.getScreenHeight(context) / 6;
 
     return AdvancedDrawer(
@@ -97,145 +98,149 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: GridView.builder(
-                  itemCount: todoList.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: (gridItemWidth / gridItemHeight),
-                    crossAxisCount: 2,
-                  ),
-                  itemBuilder: (
-                    BuildContext context,
-                    int index,
-                  ) {
-                    final todos = todoList[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        color: !todoList[index].pin
-                            ? Colors.blueGrey[200]
-                            : Colors.blue[100],
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 8.0, left: 8.0),
-                                  child: Chip(
-                                    materialTapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    labelPadding: const EdgeInsets.all(0.0),
-                                    side: const BorderSide(
-                                      color: Color.fromARGB(
-                                        255,
-                                        160,
-                                        229,
-                                        229,
-                                      ),
-                                    ),
-                                    label: Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 6.0,
-                                        right: 6,
-                                        top: 2,
-                                        bottom: 2,
-                                      ),
-                                      child: Text(
-                                        todos.title,
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                                    backgroundColor: Colors.white,
-                                  ),
-                                ),
-                                const Spacer(),
-                                PopupMenuButton(itemBuilder: (context) {
-                                  return [
-                                    PopupMenuItem<int>(
-                                      value: 0,
-                                      child: !todos.pin
-                                          ? const Text("Pin")
-                                          : const Text("Unpin"),
-                                    ),
-                                    const PopupMenuItem<int>(
-                                      value: 1,
-                                      child: Text("Edit"),
-                                    ),
-                                    const PopupMenuItem<int>(
-                                      value: 2,
-                                      child: Text("Delete"),
-                                    ),
-                                  ];
-                                }, onSelected: (value) {
-                                  final todo = todoList[index];
-                                  final todoNotifier = ref.read(
-                                    todosProvider.notifier,
-                                  );
-
-                                  if (value == 0) {
-                                    //Pin Todo
-                                    todoNotifier.pinned(todo.id, !todo.pin);
-                                  } else if (value == 1) {
-                                    todoTitleController.text = todo.title;
-
-                                    todoDescriptionController.text =
-                                        todo.description;
-                                    //Edit Todo
-                                    customStatefullAlertWidget(
-                                      id: todo.id,
-                                      editable: true,
-                                      pin: todo.pin,
-                                    );
-                                  } else {
-                                    //Delete Todo
-                                    todoNotifier.removeTodo(todo.id);
-                                  }
-                                }),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 8.0, right: 6, top: 2, bottom: 2),
-                                child: Text(
-                                  maxLines: 3,
-                                  todoList[index].description,
-                                  overflow: TextOverflow.ellipsis,
+          child: GridView.builder(
+            itemCount: todoList.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: (gridItemWidth / gridItemHeight),
+              crossAxisCount: 2,
+            ),
+            itemBuilder: (
+              BuildContext context,
+              int index,
+            ) {
+              final todos = todoList[index];
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  color: !todoList[index].pin
+                      ? Colors.blueGrey[200]
+                      : Colors.blue[100],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Title and Menu Icon of todos
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: 8.0, left: 8.0),
+                            child: Chip(
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              labelPadding: const EdgeInsets.all(0.0),
+                              side: const BorderSide(
+                                color: Color.fromARGB(
+                                  255,
+                                  160,
+                                  229,
+                                  229,
                                 ),
                               ),
+                              label: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 6.0,
+                                  right: 6,
+                                  top: 2,
+                                  bottom: 2,
+                                ),
+                                child: Text(
+                                  todos.title,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              backgroundColor: Colors.white,
                             ),
-                            Row(
-                              children: const [
-                                Text("See More"),
-                                Icon(Icons.arrow_forward)
-                              ],
+                          ),
+                          const Spacer(),
+                          PopupMenuButton(itemBuilder: (context) {
+                            return [
+                              PopupMenuItem<int>(
+                                value: 0,
+                                child: !todos.pin
+                                    ? const Text("Pin")
+                                    : const Text("Unpin"),
+                              ),
+                              const PopupMenuItem<int>(
+                                value: 1,
+                                child: Text("Edit"),
+                              ),
+                              const PopupMenuItem<int>(
+                                value: 2,
+                                child: Text("Delete"),
+                              ),
+                            ];
+                          }, onSelected: (value) {
+                            final todo = todoList[index];
+                            final todoNotifier = ref.read(
+                              todosProvider.notifier,
+                            );
+
+                            if (value == 0) {
+                              //Pin Todo
+                              todoNotifier.pinned(todo.id, !todo.pin);
+                            } else if (value == 1) {
+                              todoTitleController.text = todo.title;
+
+                              todoDescriptionController.text =
+                                  todo.description;
+                              //Edit Todo
+                              customStatefullAlertWidget(
+                                id: todo.id,
+                                editable: true,
+                                pin: todo.pin,
+                              );
+                            } else {
+                              //Delete Todo
+                              todoNotifier.removeTodo(todo.id);
+                            }
+                          }),
+                        ],
+                      ),
+                      // Description of todos
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 8.0, right: 6, top: 2, bottom: 2),
+                        child: Text(
+                          maxLines: 3,
+                          todoList[index].description,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      //See More
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: const [
+                            Text(
+                              "See More",
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            Icon(
+                              Icons.arrow_forward,
+                              size: 16,
                             )
                           ],
                         ),
-                      ),
-                    );
-                  },
+                      )
+                    ],
+                  ),
                 ),
-              )
-            ],
+              );
+            },
           ),
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: customStatefullAlertWidget,
           label: const Text(
-            "Add",
+            "Add Todo",
             style: TextStyle(color: Colors.white),
           ),
           tooltip: "Add your todo",
@@ -248,6 +253,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     String? id,
     bool editable = false,
     bool pin = false,
+    bool selected = false,
   }) async {
     await showDialog(
         context: context,
@@ -304,6 +310,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       description: todoDescriptionController.text,
                       title: todoTitleController.text,
                       pin: pin,
+                      selected: selected,
                     );
 
                     final todoNotifier = ref.read(

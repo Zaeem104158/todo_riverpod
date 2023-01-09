@@ -12,23 +12,19 @@ class TodoTrashNotifier extends StateNotifier<List<Todo>> {
     state = [...state, todo];
   }
 
-  void removeFromTrashProvider(List<String> todoId) {
+  void removeFromTrashProvider(List<String> todoIds) {
     List<Todo> recoverTodoList = [];
-    todoId.forEach(
-      (id) {
-        state = state.where((element) {
-          if (element.id != id) {
-            return true;
-          } else {
-            recoverTodoList.add(element);
-            return false;
-          }
-        }).toList();
-      },
-    );
-    for (var element in recoverTodoList) {
-      ref.watch(todosProvider.notifier).addTodo(element);
-    }
+
+    state = state.where((element) {
+      if (todoIds.contains(element.id)) {
+        recoverTodoList.add(element);
+        return false;
+      }
+
+      return true;
+    }).toList();
+
+    ref.watch(todosProvider.notifier).addAllTodo(recoverTodoList);
   }
 }
 

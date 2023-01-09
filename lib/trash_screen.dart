@@ -1,20 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_riverpod/controller/todo_trash_provider.dart';
+import 'package:todo_riverpod/model/todo_model.dart';
 
-class TrashScreen extends ConsumerStatefulWidget {
+class TrashScreen extends ConsumerWidget {
   const TrashScreen({super.key});
 
   @override
-  ConsumerState<TrashScreen> createState() => _TrashScreenState();
-}
-
-class _TrashScreenState extends ConsumerState<TrashScreen> {
-  List<String> recoverList = [];
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final todoTrashList = ref.watch(todoTrashProvider);
-    // bool selected = true;
+    //final todoTrashListNotifier = ref.watch(todoTrashProvider.notifier);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -24,23 +21,18 @@ class _TrashScreenState extends ConsumerState<TrashScreen> {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                // CheckboxListTile(
-                //   value: selectAll(),
-                //   onChanged: (value) {
-
-                //   },
-                //   title: const Text("Select All"),
-                // ),
                 Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: todoTrashList.length,
                     itemBuilder: (context, index) {
                       return CheckboxListTile(
-                        value: checkId(todoTrashList[index].id.toString()),
-                        selected: checkId(todoTrashList[index].id.toString()),
+                        value: todoTrashList[index].selected,
                         onChanged: (value) {
-                          handleData(todoTrashList[index].id.toString());
+                          todoTrashList[index] =
+                              todoTrashList[index].copyWith(selected: value);
+                          //todoTrashListNotifier.
+                         
                         },
                         title: Text(todoTrashList[index].title),
                         subtitle: Text(
@@ -53,10 +45,13 @@ class _TrashScreenState extends ConsumerState<TrashScreen> {
                 ElevatedButton(
                   onPressed: () {
                     final todoTrashNotifier =
-                        ref.watch(todoTrashProvider.notifier);
-                  
-                    todoTrashNotifier.removeFromTrashProvider(recoverList);
+                        ref.read(todoTrashProvider.notifier);
 
+                    //selected trash ids
+                    List<String> recoverTodoIdsList = ["123","456"];
+
+                    todoTrashNotifier
+                        .removeFromTrashProvider(recoverTodoIdsList);
                   },
                   child: const Text("Recover"),
                 )
@@ -66,36 +61,7 @@ class _TrashScreenState extends ConsumerState<TrashScreen> {
     );
   }
 
-  handleData(String id) {
-    if (recoverList.contains(id)) {
-      recoverList.remove(id);
-    } else {
-      recoverList.add(id);
-    }
-
-    setState(() {});
+  bool checkTrashItem() {
+    return true;
   }
-
-  bool checkId(String id) {
-    if (recoverList.contains(id)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // bool selectAll() {
-  //   if (ref.watch(todoTrashProvider).length == recoverList.length) {
-  //     return true;
-
-  //   } else {
-
-  //     return false;
-  //   }
-  // }
-  // handleAlldata(){
-  //   if){
-
-  //   }
-  // }
 }
