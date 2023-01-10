@@ -7,22 +7,22 @@ class TodoTrashNotifier extends StateNotifier<List<Todo>> {
   TodoTrashNotifier(this.ref) : super([]);
 
   final Ref ref;
-
+  //Add todos to trash screen
   void addTrashTodo(
     Todo todo,
   ) {
     state = [...state, todo];
   }
-
+  //checking the state of trash either selected or deselected
   List<String> idsList = [];
   void checkSelectedTrash(String id) {
     final updateTodoState = state.map((e) {
       if (e.id == id && e.selected == false) {
-        // log("Yes");
+      
 
         return e.copyWith(selected: true);
       } else if (e.id == id && e.selected == true) {
-        // log("No");
+      
         return e.copyWith(selected: false);
       } else {
         return e;
@@ -30,7 +30,7 @@ class TodoTrashNotifier extends StateNotifier<List<Todo>> {
     }).toList();
     state = updateTodoState;
   }
-
+  //Remove from trash screen
   void removeFromTrashProvider(List<String> todoIds) {
     List<Todo> recoverTodoList = [];
     state = state.where((element) {
@@ -41,12 +41,12 @@ class TodoTrashNotifier extends StateNotifier<List<Todo>> {
 
       return true;
     }).toList();
-    recoverTodoList.forEach((element) {
-      ref.watch(todosProvider.notifier).addTodo(element);
+    recoverTodoList.forEach((todo) {
+      ref.watch(todosProvider.notifier).addTodo(todo);
     });
   }
 }
-
+//connector with the ui
 final todoTrashProvider =
     StateNotifierProvider<TodoTrashNotifier, List<Todo>>((ref) {
   return TodoTrashNotifier(ref);

@@ -48,7 +48,7 @@ class TrashScreen extends ConsumerWidget {
                     final recoverTodoListNotifer =
                         ref.read(todoTrashProvider.notifier);
                     for (var element in recoverTodoList) {
-                      selectedtodoIds = [];
+                      // selectedtodoIds = [];
                       selectedtodoIds.add(element.id);
                     }
                     recoverTodoListNotifer

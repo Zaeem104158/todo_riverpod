@@ -12,6 +12,7 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
   }
 
   void addTodo(Todo todo) {
+    todo=todo.copyWith(selected: false);
     state = [...state, todo];
   }
 
