@@ -43,14 +43,16 @@ class TrashScreen extends ConsumerWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    // final todoTrashNotifier =
-                    //     ref.read(todoTrashProvider.notifier);
-
-                    //selected trash ids
-                     List<String> recoverTodoIdsList = ["123", "456"];
-
-                    // todoTrashNotifier
-                    //     .removeFromTrashProvider(recoverTodoIdsList);
+                    List<String> selectedtodoIds = [];
+                    final recoverTodoList = ref.read(todoTrashProvider);
+                    final recoverTodoListNotifer =
+                        ref.read(todoTrashProvider.notifier);
+                    for (var element in recoverTodoList) {
+                      selectedtodoIds = [];
+                      selectedtodoIds.add(element.id);
+                    }
+                    recoverTodoListNotifer
+                        .removeFromTrashProvider(selectedtodoIds);
                   },
                   child: const Text("Recover"),
                 )
