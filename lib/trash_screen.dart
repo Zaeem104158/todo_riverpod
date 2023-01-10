@@ -46,8 +46,8 @@ class TrashScreen extends ConsumerWidget {
                     // final todoTrashNotifier =
                     //     ref.read(todoTrashProvider.notifier);
 
-                    // //selected trash ids
-                    // List<String> recoverTodoIdsList = ["123", "456"];
+                    //selected trash ids
+                     List<String> recoverTodoIdsList = ["123", "456"];
 
                     // todoTrashNotifier
                     //     .removeFromTrashProvider(recoverTodoIdsList);

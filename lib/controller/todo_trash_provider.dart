@@ -14,22 +14,23 @@ class TodoTrashNotifier extends StateNotifier<List<Todo>> {
     state = [...state, todo];
   }
 
+  List<String> idsList = [];
   void checkSelectedTrash(String id) {
-    final checkSelectState = state.map((e) {
+    final updateTodoState = state.map((e) {
       if (e.id == id && e.selected == false) {
-        log("Yes");
+        // log("Yes");
+
         return e.copyWith(selected: true);
-      } else {
-        log("No");
+      } else if (e.id == id && e.selected == true) {
+        // log("No");
         return e.copyWith(selected: false);
+      } else {
+        return e;
       }
     }).toList();
-    state = checkSelectState;
+    state = updateTodoState;
   }
 
-  void updateTrashTodo(Todo todo) {
-    log("UpdateState:${todo.selected}");
-  }
 
   void removeFromTrashProvider(List<String> todoIds) {
     List<Todo> recoverTodoList = [];
