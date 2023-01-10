@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_riverpod/controller/todo_trash_provider.dart';
-import 'package:todo_riverpod/model/todo_model.dart';
 
 class TrashScreen extends ConsumerWidget {
   const TrashScreen({super.key});
@@ -26,8 +23,6 @@ class TrashScreen extends ConsumerWidget {
                     shrinkWrap: true,
                     itemCount: todoTrashList.length,
                     itemBuilder: (context, index) {
-                      // final todos =
-                      //     todoTrashList[index].copyWith(selected: false);
                       return CheckboxListTile(
                         value: todoTrashList[index].selected,
                         onChanged: (value) {

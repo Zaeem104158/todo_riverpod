@@ -56,7 +56,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final todoList = ref.watch(todosProvider);
 
-    var items = [
+    List<String> items = [
       "Pin",
       'Edit',
       'Delete',
@@ -244,20 +244,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ],
                         ),
                       ),
-
-                      // Padding(
-                      //   padding: const EdgeInsets.only(left: 16.0, right: 16),
-                      //   child: ReadMoreText(
-                      //     todoList[index].description,
-                      //     trimLines: 3,
-                      //     colorClickableText: Colors.pink,
-                      //     trimMode: TrimMode.Line,
-                      //     trimCollapsedText: 'Show more',
-                      //     trimExpandedText: 'Show less',
-                      //     moreStyle: TextStyle(
-                      //         fontSize: 14, fontWeight: FontWeight.bold),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),

@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_riverpod/controller/todo_trash_provider.dart';
 import 'package:todo_riverpod/model/todo_model.dart';
@@ -12,13 +11,12 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
   void addAllTodo(List<Todo> todos) {
     final List<Todo> previousTodos = [];
     previousTodos.addAll(state);
-    // state = todos;
-    //log("PrevioudTodos:$state");
+    ;
     previousTodos.addAll(todos);
 
-    previousTodos.forEach((element) {
+    for (var element in previousTodos) {
       log("message: ${element.title}");
-    });
+    }
     state = previousTodos;
   }
 
