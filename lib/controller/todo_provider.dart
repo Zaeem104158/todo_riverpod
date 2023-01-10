@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_riverpod/controller/todo_trash_provider.dart';
 import 'package:todo_riverpod/model/todo_model.dart';
@@ -8,11 +10,19 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
   final Ref ref;
 
   void addAllTodo(List<Todo> todos) {
-    state = todos;
+    final List<Todo> previousTodos = [];
+    previousTodos.addAll(state);
+    // state = todos;
+    //log("PrevioudTodos:$state");
+    previousTodos.addAll(todos);
+
+    previousTodos.forEach((element) {
+      log("message: ${element.title}");
+    });
+    state = previousTodos;
   }
 
   void addTodo(Todo todo) {
-    todo=todo.copyWith(selected: false);
     state = [...state, todo];
   }
 
@@ -23,6 +33,7 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
       if (todo.id != todoId) {
         return true;
       }
+
       trashTodo = todo;
       return false;
     }).toList();

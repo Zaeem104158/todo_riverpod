@@ -26,12 +26,15 @@ class TrashScreen extends ConsumerWidget {
                     shrinkWrap: true,
                     itemCount: todoTrashList.length,
                     itemBuilder: (context, index) {
+                      // final todos =
+                      //     todoTrashList[index].copyWith(selected: false);
                       return CheckboxListTile(
                         value: todoTrashList[index].selected,
                         onChanged: (value) {
-                          // log("UpdateState:${todo.selected}");
-                          todoTrashListNotifier
-                              .checkSelectedTrash(todoTrashList[index].id);
+                          todoTrashListNotifier.checkSelectedTrash(
+                            todoTrashList[index].id,
+                            value ?? false,
+                          );
                         },
                         title: Text(todoTrashList[index].title),
                         subtitle: Text(
@@ -43,16 +46,10 @@ class TrashScreen extends ConsumerWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    List<String> selectedtodoIds = [];
-                    final recoverTodoList = ref.read(todoTrashProvider);
-                    final recoverTodoListNotifer =
-                        ref.read(todoTrashProvider.notifier);
-                    for (var element in recoverTodoList) {
-                      // selectedtodoIds = [];
-                      selectedtodoIds.add(element.id);
-                    }
-                    recoverTodoListNotifer
-                        .removeFromTrashProvider(selectedtodoIds);
+                    final recoverTodoListNotifer = ref.read(
+                      todoTrashProvider.notifier,
+                    );
+                    recoverTodoListNotifer.restoreTodoProvider();
                   },
                   child: const Text("Recover"),
                 )
@@ -60,9 +57,5 @@ class TrashScreen extends ConsumerWidget {
             )),
       ),
     );
-  }
-
-  bool checkTrashItem() {
-    return true;
   }
 }

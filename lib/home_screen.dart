@@ -4,9 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_riverpod/controller/todo_provider.dart';
 import 'package:todo_riverpod/home_drawer_widget.dart';
 import 'package:todo_riverpod/model/todo_model.dart';
+import 'package:todo_riverpod/seemore_description_screen.dart';
 import 'package:todo_riverpod/utils/size_config.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
+import 'package:readmore/readmore.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -30,7 +32,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         (index) {
           return Todo(
             id: const Uuid().v4(),
-            description: "Description $index",
+            description:
+                "Descriptionn $index",
             title: "Title $index",
             pin: false,
             selected: false,
@@ -59,14 +62,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       'Delete',
     ];
 
-    final double gridItemHeight = SizeConfig.getScreenHeight(context) / 6.5;
-    final double gridItemWidth = SizeConfig.getScreenHeight(context) / 6;
+    final double gridItemHeight = SizeConfig.getScreenHeight(context) / 8;
+    final double gridItemWidth = SizeConfig.getScreenHeight(context) / 5;
 
     return AdvancedDrawer(
       backdropColor: Colors.blueGrey[700],
       controller: _advancedDrawerController,
       animationCurve: Curves.easeInOut,
-      animationDuration: const Duration(milliseconds: 300),
+      animationDuration: const Duration(milliseconds: 250),
       animateChildDecoration: true,
       rtlOpening: false,
       disabledGestures: false,
@@ -124,8 +127,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding:
-                                const EdgeInsets.only(top: 8.0, left: 8.0),
+                            padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                             child: Chip(
                               materialTapTargetSize:
                                   MaterialTapTargetSize.shrinkWrap,
@@ -185,8 +187,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             } else if (value == 1) {
                               todoTitleController.text = todo.title;
 
-                              todoDescriptionController.text =
-                                  todo.description;
+                              todoDescriptionController.text = todo.description;
                               //Edit Todo
                               customStatefullAlertWidget(
                                 id: todo.id,
@@ -201,35 +202,62 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ],
                       ),
                       // Description of todos
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 8.0, right: 6, top: 2, bottom: 2),
-                        child: Text(
-                          maxLines: 3,
-                          todoList[index].description,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      //See More
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: const [
-                            Text(
-                              "See More",
-                              style: TextStyle(fontSize: 12),
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                textAlign: TextAlign.start,
+                                maxLines: 1,
+                                todoList[index].description,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                            Icon(
-                              Icons.arrow_forward,
-                              size: 16,
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SeeMoreDescription(
+                                        todoList[index].description,
+                                      ),
+                                    ));
+                              },
+                              child: Row(
+                                children: const [
+                                  Text(
+                                    "See More",
+                                    style: TextStyle(fontSize: 8),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward,
+                                    size: 8,
+                                  )
+                                ],
+                              ),
                             )
                           ],
                         ),
-                      )
+                      ),
+
+                      // Padding(
+                      //   padding: const EdgeInsets.only(left: 16.0, right: 16),
+                      //   child: ReadMoreText(
+                      //     todoList[index].description,
+                      //     trimLines: 3,
+                      //     colorClickableText: Colors.pink,
+                      //     trimMode: TrimMode.Line,
+                      //     trimCollapsedText: 'Show more',
+                      //     trimExpandedText: 'Show less',
+                      //     moreStyle: TextStyle(
+                      //         fontSize: 14, fontWeight: FontWeight.bold),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
