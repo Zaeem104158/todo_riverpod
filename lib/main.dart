@@ -28,15 +28,15 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'seeMoreDescriptionScreen',
           builder: (BuildContext context, GoRouterState state) {
-            return   SeeMoreDescriptionScreen(description: state.extra.toString(),);
+            return SeeMoreDescriptionScreen(
+              description: state.extra.toString(),
+            );
           },
         ),
-        
       ],
     ),
   ],
 );
-
 
 class TodoRiverPod extends StatelessWidget {
   const TodoRiverPod({super.key});
@@ -47,10 +47,9 @@ class TodoRiverPod extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter todo with riverpod demo',
       theme: ThemeData(
-        primarySwatch: generateMaterialColor(
-            color: Colors.blueGrey),
+        primarySwatch: generateMaterialColor(color: Colors.blueGrey),
       ),
-       routerConfig: _router,
+      routerConfig: _router,
     );
   }
 }

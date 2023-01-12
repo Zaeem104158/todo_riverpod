@@ -2,17 +2,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_riverpod/controller/todo_provider.dart';
 import 'package:todo_riverpod/model/todo_model.dart';
 
-class TodoTrashNotifier extends StateNotifier<List<Todo>> {
-  TodoTrashNotifier(this.ref) : super([]);
+class TodotrashNotifier extends StateNotifier<List<Todo>> {
+  TodotrashNotifier(this.ref) : super([]);
 
   final Ref ref;
+
   //Add todos to trash screen
-  void addTrashTodo(Todo todo) {
+  void addtrashTodo(Todo todo) {
     state = [...state, todo];
   }
 
   //checking the state of trash either selected or deselected
-  void checkSelectedTrash(String id, bool selected) {
+  void checkSelectedtrash(String id, bool selected) {
     state = state.map((todo) {
       if (todo.id == id) {
         todo = todo.copyWith(
@@ -22,6 +23,11 @@ class TodoTrashNotifier extends StateNotifier<List<Todo>> {
 
       return todo;
     }).toList();
+  }
+
+  //unselected or clear trash
+  void unselectedOrCleartrashProvider() {
+    state = [];
   }
 
   //Remove from trash screen
@@ -46,7 +52,7 @@ class TodoTrashNotifier extends StateNotifier<List<Todo>> {
 }
 
 //connector with the ui
-final todoTrashProvider =
-    StateNotifierProvider<TodoTrashNotifier, List<Todo>>((ref) {
-  return TodoTrashNotifier(ref);
+final todotrashProvider =
+    StateNotifierProvider<TodotrashNotifier, List<Todo>>((ref) {
+  return TodotrashNotifier(ref);
 });

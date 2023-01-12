@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_riverpod/home_screen.dart';
-import 'package:todo_riverpod/trash_screen.dart';
 
 class HomeScreenDrawerWidget extends StatelessWidget {
   const HomeScreenDrawerWidget({super.key});
@@ -17,17 +16,6 @@ class HomeScreenDrawerWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               ListTile(
-                onTap: () {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (context) => const HomeScreen(),
-                  //     ));
-                },
-                leading: const Icon(Icons.home),
-                title: const Text('Home'),
-              ),
-              ListTile(
                 onTap: () {},
                 leading: const Icon(Icons.account_circle_rounded),
                 title: const Text('Profile'),
@@ -35,7 +23,7 @@ class HomeScreenDrawerWidget extends StatelessWidget {
               ListTile(
                 onTap: () => context.go('/trashScreen'),
                 leading: const Icon(Icons.delete_forever_sharp),
-                title: const Text('Archive'),
+                title: const Text('Trash'),
               ),
               ListTile(
                 onTap: () {},

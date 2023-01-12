@@ -80,8 +80,8 @@
    <AnalyzeAction
       buildConfiguration = "Debug">
    </AnalyzeAction>
-   <ArchiveAction
+   <trashAction
       buildConfiguration = "Release"
-      revealArchiveInOrganizer = "YES">
-   </ArchiveAction>
+      revealtrashInOrganizer = "YES">
+   </trashAction>
 </Scheme>

@@ -31,10 +31,10 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
       return false;
     }).toList();
 
-    //Store Trash todos
+    //Store trash todos
 
     if (trashTodo != null) {
-      ref.watch(todoTrashProvider.notifier).addTrashTodo(trashTodo!);
+      ref.watch(todotrashProvider.notifier).addtrashTodo(trashTodo!);
     }
   }
 
