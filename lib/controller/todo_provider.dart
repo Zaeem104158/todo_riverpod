@@ -11,12 +11,7 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
   void addAllTodo(List<Todo> todos) {
     final List<Todo> previousTodos = [];
     previousTodos.addAll(state);
-    ;
     previousTodos.addAll(todos);
-
-    for (var element in previousTodos) {
-      log("message: ${element.title}");
-    }
     state = previousTodos;
   }
 

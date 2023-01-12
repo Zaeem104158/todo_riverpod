@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:todo_riverpod/controller/todo_provider.dart';
 import 'package:todo_riverpod/home_drawer_widget.dart';
 import 'package:todo_riverpod/model/todo_model.dart';
@@ -8,7 +9,6 @@ import 'package:todo_riverpod/seemore_description_screen.dart';
 import 'package:todo_riverpod/utils/size_config.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
-import 'package:readmore/readmore.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -32,8 +32,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         (index) {
           return Todo(
             id: const Uuid().v4(),
-            description:
-                "Descriptionn $index",
+            description: "Descriptionn $index",
             title: "Title $index",
             pin: false,
             selected: false,
@@ -81,6 +80,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       drawer: const HomeScreenDrawerWidget(),
       child: SafeArea(
           child: Scaffold(
+        backgroundColor: Colors.grey,
         appBar: AppBar(
           title: const Text("Welcome to Home"),
           leading: IconButton(
@@ -201,10 +201,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           }),
                         ],
                       ),
-                      // Description of todos
-                      // const SizedBox(
-                      //   height: 20,
-                      // ),
+
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
@@ -219,15 +216,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                             ),
                             InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SeeMoreDescription(
-                                        todoList[index].description,
-                                      ),
-                                    ));
-                              },
+                              onTap: () => context.go(
+                                  '/seeMoreDescriptionScreen',
+                                  extra: todoList[index].description),
                               child: Row(
                                 children: const [
                                   Text(
