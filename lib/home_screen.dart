@@ -34,7 +34,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             description: "Descriptionn $index",
             title: "Title $index",
             pin: false,
-            selected: false,
           );
         },
       );
@@ -319,7 +318,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       description: todoDescriptionController.text,
                       title: todoTitleController.text,
                       pin: pin,
-                      selected: selected,
                     );
 
                     final todoNotifier = ref.read(
