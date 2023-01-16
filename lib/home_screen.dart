@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +11,7 @@ import 'package:todo_riverpod/utils/size_config.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -20,27 +23,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   TextEditingController todoTitleController = TextEditingController();
   TextEditingController todoDescriptionController = TextEditingController();
   final _advancedDrawerController = AdvancedDrawerController();
-  final prefs =  SharedPreferences.getInstance();
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-  //     final initialTodos = List.generate(
-  //       4,
-  //       (index) {
-  //         return Todo(
-  //           id: const Uuid().v4(),
-  //           description: "Descriptionn $index",
-  //           title: "Title $index",
-  //           pin: false,
-  //         );
-  //       },
-  //     );
-
-  //     ref.read(todosProvider.notifier).addAllTodo(initialTodos);
-  //   });
-  // }
+  
+  @override
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
+      final todosNotifier = ref.watch(todosProvider.notifier);
+      todosNotifier.readTodoFromDevice();
+    });
+  }
 
   @override
   void dispose() {
@@ -246,9 +237,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: customStatefullAlertWidget,
-            label: const Text(
-              "Add Todo",
-              style: TextStyle(color: Colors.white),
+            label: Row(
+              children: const [
+                Text(
+                  "Add Todo",
+                  style: TextStyle(color: Colors.white),
+                ),
+                Icon(Icons.add)
+              ],
             ),
             tooltip: "Add your todo",
           ),

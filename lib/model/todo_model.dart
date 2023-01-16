@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 
 @immutable
@@ -28,4 +29,34 @@ class Todo {
       pin: pin ?? this.pin,
     );
   }
+
+  factory Todo.fromJson(Map<String, dynamic> jsonData) {
+    return Todo(
+      id: jsonData['id'],
+      title: jsonData['title'],
+      description: jsonData['description'],
+      pin: false,
+     
+    );
+  }
+
+  static Map<String, dynamic> toMap(Todo todo) => {
+        'id': todo.id,
+        'title': todo.title,
+        'description': todo.description,
+        'pin': todo.pin,
+        
+      };
+
+   static String encode(List<Todo> todos) => json.encode(
+        todos
+            .map<Map<String, dynamic>>((todos) => Todo.toMap(todos))
+            .toList(),
+      );
+
+  static List<Todo> decode(String todos) =>
+      (json.decode(todos) as List<dynamic>)
+          .map<Todo>((item) => Todo.fromJson(item))
+          .toList();
+
 }

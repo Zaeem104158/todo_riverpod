@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_riverpod/controller/todo_provider.dart';
 import 'package:todo_riverpod/model/todo_model.dart';
+import 'package:todo_riverpod/utils/const.dart';
+import 'package:todo_riverpod/utils/shared_pref.dart';
 
 class TodoTrashNotifier extends StateNotifier<List<Todo>> {
   TodoTrashNotifier(this.ref) : super([]);
@@ -17,6 +19,7 @@ class TodoTrashNotifier extends StateNotifier<List<Todo>> {
   //Clear trash
   void clearAllTrashProvider() {
     state = [];
+    SharedPref.remove(todoKey);
   }
 
   //Recover from trash screen

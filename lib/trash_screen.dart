@@ -1,9 +1,10 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_riverpod/controller/todo_trash_provider.dart';
+import 'package:todo_riverpod/utils/const.dart';
 
 class TrashScreen extends ConsumerWidget {
   const TrashScreen({super.key});
@@ -25,16 +26,37 @@ class TrashScreen extends ConsumerWidget {
           ),
           actions: [
             InkWell(
-                onTap: () {
-                  final todotrashListNotifier =
-                      ref.read(todotrashProvider.notifier);
-                  todotrashListNotifier.clearAllTrashProvider();
+                onTap: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Are you sure?'),
+                      content: const Text('Do you want to clear the trash?'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: const Text('No'),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            final todotrashListNotifier =
+                                ref.read(todotrashProvider.notifier);
+                            todotrashListNotifier.clearAllTrashProvider();
+                            final prefs = await SharedPreferences.getInstance();
+                            final success = await prefs.remove(todoKey);
+                            Navigator.of(context).pop(true);
+                          },
+                          child: const Text('Yes'),
+                        ),
+                      ],
+                    ),
+                  );
                 },
                 child: const Padding(
                   padding: EdgeInsets.all(16),
                   child: Text(
                     "Clear",
-                    style: TextStyle(fontSize: 24),
+                    style: TextStyle(fontSize: 24, color: Colors.redAccent),
                   ),
                 ))
           ],

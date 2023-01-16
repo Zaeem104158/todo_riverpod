@@ -1,13 +1,35 @@
 import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_riverpod/controller/todo_trash_provider.dart';
 import 'package:todo_riverpod/model/todo_model.dart';
+import 'package:todo_riverpod/utils/const.dart';
+import 'package:todo_riverpod/utils/shared_pref.dart';
 
 class TodosNotifier extends StateNotifier<List<Todo>> {
   TodosNotifier(this.ref) : super([]);
 
   final Ref ref;
 
+  // Write data in local storage
+  writeTodoInDevice() async {
+    List<Todo> todosList = state;
+    final String encodedData = Todo.encode(todosList);
+    SharedPref.write(todoKey, encodedData);
+  }
+
+  // Read data from local storage
+  readTodoFromDevice() async {
+    final String? todosString = await SharedPref.read(todoKey);
+    if (todosString != null) {
+      final List<Todo> todosList = Todo.decode(todosString);
+      ref.read(todosProvider.notifier).addAllTodo(todosList);
+    } else {
+      ref.read(todosProvider.notifier).addAllTodo([]);
+    }
+  }
+
+  //Add new todo in previous state
   void addAllTodo(List<Todo> todos) {
     final List<Todo> previousTodos = [];
     previousTodos.addAll(state);
@@ -15,10 +37,13 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
     state = previousTodos;
   }
 
+  // Add new todo
   void addTodo(Todo todo) {
     state = [...state, todo];
+    writeTodoInDevice();
   }
 
+  //Remove todo
   void removeTodo(String? todoId) {
     Todo? trashTodo;
 
@@ -31,8 +56,7 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
       return false;
     }).toList();
 
-    //Store trash todos
-
+    //Recover todos
     if (trashTodo != null) {
       ref.watch(todotrashProvider.notifier).addtrashTodo(trashTodo!);
     }

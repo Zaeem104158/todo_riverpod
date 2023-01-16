@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_riverpod/home_screen.dart';
 import 'package:material_color_generator/material_color_generator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_riverpod/seemore_description_screen.dart';
 import 'package:todo_riverpod/trash_screen.dart';
+import 'package:todo_riverpod/utils/shared_pref.dart';
 
-void main() {
-  runApp(const ProviderScope(child: TodoRiverPod()));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final sharedPreferences = await SharedPreferences.getInstance();
+  runApp( ProviderScope(
+    overrides: [
+      // override the previous value with the new object
+      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+    ],
+    child: const TodoRiverPod()));
 }
 
 /// The route configuration.
