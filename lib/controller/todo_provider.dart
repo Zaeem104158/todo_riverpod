@@ -67,4 +67,3 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
 final todosProvider = StateNotifierProvider<TodosNotifier, List<Todo>>((ref) {
   return TodosNotifier(ref);
 });
-

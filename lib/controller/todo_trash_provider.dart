@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_riverpod/controller/todo_provider.dart';
 import 'package:todo_riverpod/model/todo_model.dart';
@@ -25,7 +27,7 @@ class TodoTrashNotifier extends StateNotifier<List<Todo>> {
       state = state.where((todo) {
         if (element == todo.id) {
           recoverTodoList.add(todo);
-          //return false;
+          return false;
         }
         return true;
       }).toList();
@@ -34,29 +36,29 @@ class TodoTrashNotifier extends StateNotifier<List<Todo>> {
   }
 }
 
-  //connector with the ui
-  final todotrashProvider =
-      StateNotifierProvider<TodoTrashNotifier, List<Todo>>((ref) {
-    return TodoTrashNotifier(ref);
-  });
+//connector with the ui
+final todotrashProvider =
+    StateNotifierProvider<TodoTrashNotifier, List<Todo>>((ref) {
+  return TodoTrashNotifier(ref);
+});
 
-  //Select or Deselect in trash notifier
-  class TodoSelectTrashNotifier extends StateNotifier<List<String>> {
-    TodoSelectTrashNotifier() : super([]);
+//Select or Deselect in trash notifier
+class TodoSelectTrashNotifier extends StateNotifier<List<String>> {
+  TodoSelectTrashNotifier() : super([]);
 
-    //Select or Deselect Todos
-    void selectDeselectTrashTodo(String todoId) {
-      if (state.contains(todoId)) {
-        state = state.where((id) => id != todoId).toList();
-      } else {
-        state = [...state, todoId];
-      }
+  //Select or Deselect Todos
+  void selectDeselectTrashTodo(String todoId) {
+    if (state.contains(todoId)) {
+      state = state.where((id) => id != todoId).toList();
+    } else {
+      state = [...state, todoId];
     }
   }
+}
 
-  //connector with the ui
-  final selectDeselectTrashTodoProvider =
-      StateNotifierProvider.autoDispose<TodoSelectTrashNotifier, List<String>>(
-          (ref) {
-    return TodoSelectTrashNotifier();
-  });
+//connector with the ui
+final selectDeselectTrashTodoProvider =
+    StateNotifierProvider.autoDispose<TodoSelectTrashNotifier, List<String>>(
+        (ref) {
+  return TodoSelectTrashNotifier();
+});

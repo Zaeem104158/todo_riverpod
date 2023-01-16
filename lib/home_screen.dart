@@ -8,7 +8,7 @@ import 'package:todo_riverpod/model/todo_model.dart';
 import 'package:todo_riverpod/utils/size_config.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -20,27 +20,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   TextEditingController todoTitleController = TextEditingController();
   TextEditingController todoDescriptionController = TextEditingController();
   final _advancedDrawerController = AdvancedDrawerController();
+  final prefs =  SharedPreferences.getInstance();
+  // @override
+  // void initState() {
+  //   super.initState();
 
-  @override
-  void initState() {
-    super.initState();
+  //   SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+  //     final initialTodos = List.generate(
+  //       4,
+  //       (index) {
+  //         return Todo(
+  //           id: const Uuid().v4(),
+  //           description: "Descriptionn $index",
+  //           title: "Title $index",
+  //           pin: false,
+  //         );
+  //       },
+  //     );
 
-    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      final initialTodos = List.generate(
-        4,
-        (index) {
-          return Todo(
-            id: const Uuid().v4(),
-            description: "Descriptionn $index",
-            title: "Title $index",
-            pin: false,
-          );
-        },
-      );
-
-      ref.read(todosProvider.notifier).addAllTodo(initialTodos);
-    });
-  }
+  //     ref.read(todosProvider.notifier).addAllTodo(initialTodos);
+  //   });
+  // }
 
   @override
   void dispose() {
