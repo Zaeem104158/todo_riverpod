@@ -15,6 +15,7 @@ final ThemeData lightTheme = ThemeData(
   useMaterial3: true,
   colorSchemeSeed: generateMaterialColor(color: Colors.blueGrey),
   brightness: Brightness.light,
+ 
 );
 
 final ThemeData darkTheme = ThemeData(

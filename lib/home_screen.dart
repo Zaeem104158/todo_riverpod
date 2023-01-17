@@ -1,3 +1,4 @@
+import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,7 +49,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       'Delete',
     ];
 
-    final double gridItemHeight = SizeConfig.getScreenHeight(context) / 8;
+    final double gridItemHeight = SizeConfig.getScreenHeight(context) / 16;
     final double gridItemWidth = SizeConfig.getScreenHeight(context) / 5;
 
     return AdvancedDrawer(
@@ -109,7 +110,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               itemCount: todoList.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: (gridItemWidth / gridItemHeight),
-                crossAxisCount: 2,
+                crossAxisCount: 1,
               ),
               itemBuilder: (
                 BuildContext context,
@@ -219,6 +220,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   maxLines: 1,
                                   todoList[index].description,
                                   overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(fontSize: 24),
                                 ),
                               ),
                               InkWell(
@@ -229,11 +231,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   children: const [
                                     Text(
                                       "See More",
-                                      style: TextStyle(fontSize: 8),
+                                      style: TextStyle(fontSize: 18),
                                     ),
                                     Icon(
                                       Icons.arrow_forward,
-                                      size: 8,
+                                      size: 16,
                                     )
                                   ],
                                 ),
@@ -248,18 +250,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               },
             ),
           ),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: customStatefullAlertWidget,
-            label: Row(
-              children: const [
-                Text(
-                  "Add Todo",
-                  style: TextStyle(color: Colors.white),
-                ),
-                Icon(Icons.add)
-              ],
+          floatingActionButton: DraggableFab(
+            securityBottom: 30,
+            child: FloatingActionButton.extended(
+              onPressed: customStatefullAlertWidget,
+              label: Row(
+                children: const [
+                  Text(
+                    "Add Todo",
+                  ),
+                  Icon(Icons.add)
+                ],
+              ),
+              tooltip: "Add your todo",
             ),
-            tooltip: "Add your todo",
           ),
         )),
       ),
@@ -277,7 +281,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         builder: (context) {
           return AlertDialog(
             content: SizedBox(
-              height: MediaQuery.of(context).size.height / 4.5,
+              height: MediaQuery.of(context).size.height / 4.3,
               child: Column(
                 children: [
                   //Title
