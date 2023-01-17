@@ -5,63 +5,57 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError();
 });
 
+final sharedUtilityProvider = Provider<SharedPref>((ref) {
+  final sharedPrefs = ref.watch(sharedPreferencesProvider);
+  return SharedPref(sharedPreferences: sharedPrefs);
+});
 
 class SharedPref {
-  const SharedPref(this.sharedPreferences);
+  SharedPref({
+    required this.sharedPreferences,
+  });
+
   final SharedPreferences sharedPreferences;
 
-
-  
-
-
-
-
-
-
-
-  static Future<bool> isKeyExists(String key) async {
+  bool iskeyExists(
+    String key,
+  ) {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      return prefs.containsKey(key);
+      return sharedPreferences.containsKey(key);
     } catch (e) {
       return false;
     }
   }
 
-  static Future<String?> read(var key) async {
+  Future<String?> read(var key) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      return prefs.getString(key);
+      return sharedPreferences.getString(key);
     } catch (e) {
       return null;
     }
   }
 
-  static Future<bool> write(String key, value) async {
+  Future<bool> write(String key, value) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      return prefs.setString(key, value);
+      return sharedPreferences.setString(key, value);
     } catch (e) {
       return false;
     }
   }
 
-  static Future<bool> remove(String key) async {
+  Future<bool> remove(String key) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      return prefs.remove(key);
+      return sharedPreferences.remove(key);
     } catch (e) {
       return false;
     }
   }
 
-  static Future<bool> removeAll() async {
+  Future<bool> removeAll() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      var keys = prefs.getKeys();
-
+      var keys = sharedPreferences.getKeys();
       for (var key in keys) {
-        prefs.remove(key);
+        sharedPreferences.remove(key);
       }
       return true;
     } catch (e) {
@@ -69,3 +63,55 @@ class SharedPref {
     }
   }
 }
+
+
+
+// static Future<bool> isKeyExists(String key) async {
+  //   try {
+  //     final prefs = await SharedPreferences.getInstance();
+  //     return prefs.containsKey(key);
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
+
+  // static Future<String?> read(var key) async {
+  //   try {
+  //     final prefs = await SharedPreferences.getInstance();
+  //     return prefs.getString(key);
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
+
+  // static Future<bool> write(String key, value) async {
+  //   try {
+  //     final prefs = await SharedPreferences.getInstance();
+  //     return prefs.setString(key, value);
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
+
+  // static Future<bool> remove(String key) async {
+  //   try {
+  //     final prefs = await SharedPreferences.getInstance();
+  //     return prefs.remove(key);
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
+
+  // static Future<bool> removeAll() async {
+  //   try {
+  //     final prefs = await SharedPreferences.getInstance();
+  //     var keys = prefs.getKeys();
+
+  //     for (var key in keys) {
+  //       prefs.remove(key);
+  //     }
+  //     return true;
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }

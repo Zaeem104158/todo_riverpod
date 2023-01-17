@@ -11,15 +11,38 @@ class TodoTrashNotifier extends StateNotifier<List<Todo>> {
 
   final Ref ref;
 
+  writeTrashTodoInDevice() async {
+    List<Todo> trashTodosList = state;
+    final String encodedData = Todo.encode(trashTodosList);
+    ref.watch(sharedUtilityProvider).write(deletedTodoKey, encodedData);
+  }
+
+  // Read data from local storage
+  readTrashTodoFromDevice() async {
+    final String? trashTodosString =
+        await ref.watch(sharedUtilityProvider).read(deletedTodoKey);
+    if (trashTodosString != null) {
+      final List<Todo> trashTodosList = Todo.decode(trashTodosString);
+      ref.read(todotrashProvider.notifier).addAllTrashTodo(trashTodosList);
+    } else {
+      ref.read(todotrashProvider.notifier).addAllTrashTodo([]);
+    }
+  }
+
+  void addAllTrashTodo(List<Todo> todos) {
+    state = todos;
+  }
+
   //Add todos to trash screen
   void addtrashTodo(Todo todo) {
     state = [...state, todo];
+    writeTrashTodoInDevice();
   }
 
   //Clear trash
   void clearAllTrashProvider() {
     state = [];
-    SharedPref.remove(todoKey);
+    ref.watch(sharedPreferencesProvider).remove(deletedTodoKey);
   }
 
   //Recover from trash screen
@@ -30,11 +53,13 @@ class TodoTrashNotifier extends StateNotifier<List<Todo>> {
       state = state.where((todo) {
         if (element == todo.id) {
           recoverTodoList.add(todo);
+
           return false;
         }
         return true;
       }).toList();
     }
+    writeTrashTodoInDevice();
     ref.read(todosProvider.notifier).addAllTodo(recoverTodoList);
   }
 }
