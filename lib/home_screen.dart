@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:todo_riverpod/controller/theme_provider.dart';
 import 'package:todo_riverpod/controller/todo_provider.dart';
 import 'package:todo_riverpod/home_drawer_widget.dart';
 import 'package:todo_riverpod/model/todo_model.dart';
@@ -20,7 +21,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   TextEditingController todoTitleController = TextEditingController();
   TextEditingController todoDescriptionController = TextEditingController();
   final _advancedDrawerController = AdvancedDrawerController();
-  
+
   @override
   void initState() {
     super.initState();
@@ -51,7 +52,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final double gridItemWidth = SizeConfig.getScreenHeight(context) / 5;
 
     return AdvancedDrawer(
-      backdropColor: Colors.blueGrey[700],
+      backdropColor:
+          ref.watch(isDarkProvider) ? Colors.black87 : Colors.blueGrey,
       controller: _advancedDrawerController,
       animationCurve: Curves.bounceInOut,
       animationDuration: const Duration(milliseconds: 250),
@@ -68,9 +70,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         onWillPop: _onWillPop,
         child: SafeArea(
             child: Scaffold(
-          backgroundColor: Colors.grey[200],
+          //backgroundColor: Colors.grey[200],
           appBar: AppBar(
             title: const Text("Easy Task Manager"),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton.icon(
+                  icon: ref.watch(isDarkProvider)
+                      ? const Icon(Icons.light_mode)
+                      : const Icon(Icons.dark_mode),
+                  onPressed: ref.read(isDarkProvider.notifier).toggleTheme,
+                  label: ref.watch(isDarkProvider)
+                      ? const Text('Light')
+                      : const Text('Dark'),
+                ),
+              ),
+            ],
             leading: IconButton(
               onPressed: _handleMenuButtonPressed,
               icon: ValueListenableBuilder<AdvancedDrawerValue>(

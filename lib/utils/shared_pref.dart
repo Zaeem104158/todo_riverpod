@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:todo_riverpod/utils/const.dart';
 
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError();
@@ -61,6 +62,14 @@ class SharedPref {
     } catch (e) {
       return false;
     }
+  }
+  
+   bool isDarkModeEnabled() {
+    return sharedPreferences.getBool(sharedDarkModeKey) ?? false;
+  }
+
+  void setDarkModeEnabled({required bool isdark}) {
+    sharedPreferences.setBool(sharedDarkModeKey, isdark);
   }
 }
 

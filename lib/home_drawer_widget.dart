@@ -26,7 +26,7 @@ class HomeScreenDrawerWidget extends StatelessWidget {
                 title: const Text('Trash'),
               ),
               ListTile(
-                onTap: () {},
+                onTap: () => context.go('/settingScreen'),
                 leading: const Icon(Icons.settings),
                 title: const Text('Settings'),
               ),
