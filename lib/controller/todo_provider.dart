@@ -5,6 +5,15 @@ import 'package:todo_riverpod/model/todo_model.dart';
 import 'package:todo_riverpod/utils/const.dart';
 import 'package:todo_riverpod/utils/shared_pref.dart';
 
+
+// Finally, we are using StateNotifierProvider to allow the UI to interact with
+// our TodosNotifier class.
+final todosProvider = StateNotifierProvider<TodosNotifier, List<Todo>>((ref) {
+  return TodosNotifier(ref);
+});
+
+
+
 class TodosNotifier extends StateNotifier<List<Todo>> {
   TodosNotifier(this.ref) : super([]);
 
@@ -87,9 +96,3 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
     state = pinState;
   }
 }
-
-// Finally, we are using StateNotifierProvider to allow the UI to interact with
-// our TodosNotifier class.
-final todosProvider = StateNotifierProvider<TodosNotifier, List<Todo>>((ref) {
-  return TodosNotifier(ref);
-});

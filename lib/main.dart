@@ -73,10 +73,6 @@ class TodoRiverPod extends ConsumerWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Flutter todo with riverpod demo',
-      // theme: ThemeData(
-      //   primarySwatch: generateMaterialColor(color: Colors.blueGrey),
-        
-      // ),
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: isDark ? ThemeMode.dark : ThemeMode.light,

@@ -5,7 +5,6 @@ final isDarkProvider = StateNotifierProvider<DarkThemeNotifier, bool>((ref) {
   return DarkThemeNotifier(ref: ref);
 });
 
-
 class DarkThemeNotifier extends StateNotifier<bool> {
   DarkThemeNotifier({required this.ref}) : super(true) {
     state = ref.watch(sharedUtilityProvider).isDarkModeEnabled();
@@ -19,3 +18,8 @@ class DarkThemeNotifier extends StateNotifier<bool> {
     state = ref.watch(sharedUtilityProvider).isDarkModeEnabled();
   }
 }
+
+
+
+
+

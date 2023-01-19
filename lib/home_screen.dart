@@ -7,6 +7,7 @@ import 'package:todo_riverpod/controller/theme_provider.dart';
 import 'package:todo_riverpod/controller/todo_provider.dart';
 import 'package:todo_riverpod/home_drawer_widget.dart';
 import 'package:todo_riverpod/model/todo_model.dart';
+import 'package:todo_riverpod/utils/shared_pref.dart';
 import 'package:todo_riverpod/utils/size_config.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
@@ -22,6 +23,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   TextEditingController todoTitleController = TextEditingController();
   TextEditingController todoDescriptionController = TextEditingController();
   final _advancedDrawerController = AdvancedDrawerController();
+  
 
   @override
   void initState() {
@@ -377,4 +379,5 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         )) ??
         false;
   }
+
 }
