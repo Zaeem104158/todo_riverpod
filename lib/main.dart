@@ -6,16 +6,14 @@ import 'package:todo_riverpod/home_screen.dart';
 import 'package:material_color_generator/material_color_generator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_riverpod/seemore_description_screen.dart';
+import 'package:todo_riverpod/setting_screen.dart';
 import 'package:todo_riverpod/trash_screen.dart';
 import 'package:todo_riverpod/utils/shared_pref.dart';
-
-
 
 final ThemeData lightTheme = ThemeData(
   useMaterial3: true,
   colorSchemeSeed: generateMaterialColor(color: Colors.blueGrey),
   brightness: Brightness.light,
- 
 );
 
 final ThemeData darkTheme = ThemeData(
@@ -27,12 +25,10 @@ final ThemeData darkTheme = ThemeData(
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final sharedPreferences = await SharedPreferences.getInstance();
-  runApp( ProviderScope(
-    overrides: [
-      // override the previous value with the new object
-      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-    ],
-    child: const TodoRiverPod()));
+  runApp(ProviderScope(overrides: [
+    // override the previous value with the new object
+    sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+  ], child: const TodoRiverPod()));
 }
 
 /// The route configuration.
@@ -59,6 +55,12 @@ final GoRouter _router = GoRouter(
             );
           },
         ),
+        GoRoute(
+          path: 'settingScreen',
+          builder: (BuildContext context, GoRouterState state) {
+            return  SettingScreen();
+          },
+        ),
       ],
     ),
   ],
@@ -66,9 +68,9 @@ final GoRouter _router = GoRouter(
 
 class TodoRiverPod extends ConsumerWidget {
   const TodoRiverPod({super.key});
-      
+
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isDark = ref.watch(isDarkProvider);
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
